@@ -1,3 +1,4 @@
+[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/vQdIydIU)
 # Inlämningsuppgift E2E-tester
 
 Detta projekt skall användas som mall för inlämningen av e2e-tester. Klona ner repot, ta bort .git-mappen och skapa ert eget repo av projektet. Därefter kan ni börja skriva era tester.
