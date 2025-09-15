@@ -47,4 +47,46 @@ describe("Movie search tests", () => {
 
     cy.get("#movie-container").should("have.descendants", ".movie");
   });
+
+  it("should be able to sort movies by asc/desc title", () => {
+    cy.intercept("GET", "**/omdbapi.com/**", {
+      statusCode: 200,
+      body: {
+        Search: [
+          {
+            Title: "C Movie",
+            Year: "2001",
+            imdbID: "id1",
+            Type: "movie",
+            Poster: "N/A",
+          },
+          {
+            Title: "A Movie",
+            Year: "2002",
+            imdbID: "id2",
+            Type: "movie",
+            Poster: "N/A",
+          },
+          {
+            Title: "B Movie",
+            Year: "2003",
+            imdbID: "id3",
+            Type: "movie",
+            Poster: "N/A",
+          },
+        ],
+      },
+    }).as("search");
+
+    cy.get("#searchText").type("test");
+    cy.get("#search").click();
+
+    cy.get("#sortAsc").click();
+    cy.get(".movie h3").first().should("have.text", "A Movie");
+    cy.get(".movie h3").last().should("have.text", "C Movie");
+
+    cy.get("#sortDesc").click();
+    cy.get(".movie h3").first().should("have.text", "C Movie");
+    cy.get(".movie h3").last().should("have.text", "A Movie");
+  });
 });
