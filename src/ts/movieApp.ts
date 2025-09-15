@@ -1,14 +1,33 @@
 import { IMovie } from "./models/Movie";
 import { getData } from "./services/movieService";
+import { movieSort } from "./functions";
 
 let movies: IMovie[] = [];
+let currentOrder: "asc" | "desc" = "asc";
 
 export const init = () => {
   let form = document.getElementById("searchForm") as HTMLFormElement;
+  const btnAsc = document.getElementById("sortAsc") as HTMLButtonElement;
+  const btnDesc = document.getElementById("sortDesc") as HTMLButtonElement;
+
   form.addEventListener("submit", (e: SubmitEvent) => {
     e.preventDefault();
     handleSubmit();
   });
+
+  btnAsc.addEventListener("click", () => {
+    currentOrder = "asc";
+    render();
+    setActiveButtons();
+  });
+
+  btnDesc.addEventListener("click", () => {
+    currentOrder = "desc";
+    render();
+    setActiveButtons();
+  });
+
+  setActiveButtons();
 };
 
 export async function handleSubmit() {
@@ -31,6 +50,33 @@ export async function handleSubmit() {
   } catch {
     displayNoResult(container);
   }
+}
+
+function render() {
+  const container = document.getElementById(
+    "movie-container"
+  ) as HTMLDivElement;
+  container.innerHTML = "";
+
+  if (!movies || movies.length === 0) {
+    displayNoResult(container);
+    return;
+  }
+
+  const wantAsc = currentOrder === "asc";
+
+  const sorted = movieSort([...movies], wantAsc ? true : false);
+
+  createHtml(sorted, container);
+}
+
+function setActiveButtons() {
+  const btnAsc = document.getElementById("sortAsc") as HTMLButtonElement;
+  const btnDesc = document.getElementById("sortDesc") as HTMLButtonElement;
+
+  const activeClass = "active-sort";
+  btnAsc.classList.toggle(activeClass, currentOrder === "asc");
+  btnDesc.classList.toggle(activeClass, currentOrder === "desc");
 }
 
 export const createHtml = (movies: IMovie[], container: HTMLDivElement) => {
