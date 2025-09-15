@@ -40,8 +40,11 @@ describe("Movie search tests", () => {
   });
 
   it("should display data from movie API", () => {
-    cy.intercept("GET", "**/search").as("search");
+    cy.intercept("GET", "**/omdbapi.com/**").as("search");
     cy.get("#searchText").type("matrix");
+
     cy.get("#search").click();
+
+    cy.get("#movie-container").should("have.descendants", ".movie");
   });
 });
